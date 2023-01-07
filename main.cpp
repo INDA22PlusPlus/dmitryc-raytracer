@@ -19,10 +19,13 @@ int main(int argc,char **argv) {
     img << max_color_depth << endl;
 
     for (int y = 0; y < h; y++) {
+//        cout << "Line: " << y + 1 << "/" << h << endl;
         for (int x = 0; x < w; x++) {
             img << x << " " << abs(x - y) << " " << y << endl;
         }
     }
+
+
 
     img.close();
 
