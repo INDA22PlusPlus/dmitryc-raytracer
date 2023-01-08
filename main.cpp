@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <Magick++.h>
+#include <cmath>
 using namespace std;
 using namespace Magick;
 
@@ -8,9 +9,7 @@ using namespace Magick;
 class Vec {
 public:
     // Variables
-    double x;
-    double y;
-    double z;
+    double x, y, z;
 
     // Todo: Doesn't work
 //    double& r = x;
@@ -75,11 +74,60 @@ public:
         }
     }
 
+    // Arithmetic overloading
+    Vec operator-() const {
+        return {-x, -y, -z};
+    }
+
+    // Todo: Needed?
+//    Vec operator+() const {
+//        return {x, y, z};
+//    }
+//
+//    Vec operator*() const {
+//        return {x, y, z};
+//    }
+
+
+    // Assigment overloading
+    Vec& operator+=(const Vec &v) {
+        x += v.x;
+        y += v.y;
+        z += v.z;
+        return *this;
+    }
+
+    Vec& operator-=(const Vec &v) {
+        x -= v.x;
+        y -= v.y;
+        z -= v.z;
+        return *this;
+    }
+
+    Vec& operator*=(const double t) {
+        x *= t;
+        y *= t;
+        z *= t;
+        return *this;
+    }
+
+    Vec& operator/=(const double t) {
+        return *this *= 1/t;
+    }
+
     // Todo:  References do not work at the moment, prob fix later
 //    double * get_arr() {
 //        static double arr[] = {x, y, z};
 //        return arr;
 //    }
+
+    void norm() {
+        *this /= get_norm();
+    }
+
+    double get_norm() {
+        return sqrt(x * x + y * y + z * z);
+    }
 };
 
 // Todo: Fix
@@ -94,37 +142,43 @@ int main(int argc,char **argv) {
     // Todo: Convert images using library instead of third party tools
 //    InitializeMagick(*argv);
 
-    int h = 255;
-    int w = 255;
-    int max_color_depth = 255;
+    Vec test = Vec(1, 1, 1);
+    test += Vec(0, 1, 2);
+    test -= Vec(0, 0, 1);
+//    test *= 3;
+//    test /= 3;
+//    test.norm();
+    cout << test.x << " " << test.y << " " << test.z << " " << endl;
 
-    ofstream img("img.ppm");
-    
-
-    img << "P3" << endl;
-    img << h << " " << w << endl;
-    img << max_color_depth << endl;
-
-    Vec buf[h][w];
-
-    for (int y = 0; y < h; y++) {
-//        cout << "Line: " << y + 1 << "/" << h << endl;
-        for (int x = 0; x < w; x++) {
-            Vec &color = buf[x][y];
-//            color = Vec(y, abs(y - x), x);
-//            color[0] = y;
-//            color[1] = x;
-//            color[2] = abs(y - x);
-            color.x = x;
-            color.y = y;
-            color.z = abs(y - x);
-            img << color.x << " " << color.y << " " << color.z << endl;
-        }
-    }
-
-
-
-    img.close();
+//    int h = 255;
+//    int w = 255;
+//    int max_color_depth = 255;
+//
+//    ofstream img("img.ppm");
+//
+//
+//    img << "P3" << endl;
+//    img << h << " " << w << endl;
+//    img << max_color_depth << endl;
+//
+//    Vec buf[h][w];
+//
+//    for (int y = 0; y < h; y++) {
+////        cout << "Line: " << y + 1 << "/" << h << endl;
+//        for (int x = 0; x < w; x++) {
+//            Vec &color = buf[x][y];
+////            color = Vec(y, abs(y - x), x);
+////            color[0] = y;
+////            color[1] = x;
+////            color[2] = abs(y - x);
+//            color.x = x;
+//            color.y = y;
+//            color.z = abs(y - x);
+//            img << color.x << " " << color.y << " " << color.z << endl;
+//        }
+//    }
+//
+//    img.close();
 
 //    Image ppm_file;
 //    ppm_file.read("img.ppm");
