@@ -75,6 +75,7 @@ public:
     }
 
     // Arithmetic overloading
+    // Todo: Bracket assignment right?
     Vec operator-() const {
         return {-x, -y, -z};
     }
@@ -130,6 +131,50 @@ public:
     }
 };
 
+// Vec functions
+
+inline std::ostream& operator<<(std::ostream &out, const Vec &v) {
+    return out << v.x << ' ' << v.y << ' ' << v.z;
+}
+
+// Todo: Bracket assignment right?
+inline Vec operator+(const Vec &u, const Vec &v) {
+    return {u.x + v.x, u.y + v.y, u.z + v.z};
+}
+
+// Todo: Bracket assignment right?
+inline Vec operator-(const Vec &u, const Vec &v) {
+    return {u.x - v.x, u.y - v.y, u.z - v.z};
+}
+
+// Todo: Bracket assignment right?
+inline Vec operator*(const Vec &u, const Vec &v) {
+    return {u.x * v.x, u.y * v.y, u.z * v.z};
+}
+
+// Todo: Bracket assignment right?
+inline Vec operator*(double t, const Vec &v) {
+    return {t*v.x, t*v.y, t*v.z};
+}
+
+inline Vec operator*(const Vec &v, double t) {
+    return t * v;
+}
+
+inline Vec operator/(Vec v, double t) {
+    return (1/t) * v;
+}
+
+inline double dot(const Vec &u, const Vec &v) {
+    return u.x * v.x + u.y * v.y + u.z * v.z;
+}
+
+inline Vec cross(const Vec &u, const Vec &v) {
+    return {u.y * v.z - u.z * v.y,
+            - (u.x * v.z - u.z * v.x),
+            u.x * v.y - u.y * v.x};
+}
+
 // Todo: Fix
 //class VecColor: public Vec {
 //    double &r = x;
@@ -142,43 +187,43 @@ int main(int argc,char **argv) {
     // Todo: Convert images using library instead of third party tools
 //    InitializeMagick(*argv);
 
-    Vec test = Vec(1, 1, 1);
-    test += Vec(0, 1, 2);
-    test -= Vec(0, 0, 1);
-//    test *= 3;
-//    test /= 3;
-//    test.norm();
-    cout << test.x << " " << test.y << " " << test.z << " " << endl;
+//    Vec test = Vec(1, 1, 1) + Vec(0, 1, 2) / 4;
+////    test += Vec(0, 1, 2);
+////    test -= Vec(0, 0, 1);
+////    test *= 3;
+////    test /= 3;
+////    test.norm();
+//    cout << test;
 
-//    int h = 255;
-//    int w = 255;
-//    int max_color_depth = 255;
-//
-//    ofstream img("img.ppm");
-//
-//
-//    img << "P3" << endl;
-//    img << h << " " << w << endl;
-//    img << max_color_depth << endl;
-//
-//    Vec buf[h][w];
-//
-//    for (int y = 0; y < h; y++) {
-////        cout << "Line: " << y + 1 << "/" << h << endl;
-//        for (int x = 0; x < w; x++) {
-//            Vec &color = buf[x][y];
-////            color = Vec(y, abs(y - x), x);
-////            color[0] = y;
-////            color[1] = x;
-////            color[2] = abs(y - x);
-//            color.x = x;
-//            color.y = y;
-//            color.z = abs(y - x);
-//            img << color.x << " " << color.y << " " << color.z << endl;
-//        }
-//    }
-//
-//    img.close();
+    int h = 255;
+    int w = 255;
+    int max_color_depth = 255;
+
+    ofstream img("img.ppm");
+
+
+    img << "P3" << endl;
+    img << h << " " << w << endl;
+    img << max_color_depth << endl;
+
+    Vec buf[h][w];
+
+    for (int y = 0; y < h; y++) {
+//        cout << "Line: " << y + 1 << "/" << h << endl;
+        for (int x = 0; x < w; x++) {
+            Vec &color = buf[x][y];
+//            color = Vec(y, abs(y - x), x);
+//            color[0] = y;
+//            color[1] = x;
+//            color[2] = abs(y - x);
+            color.x = x;
+            color.y = y;
+            color.z = abs(y - x);
+            img << color;
+        }
+    }
+
+    img.close();
 
 //    Image ppm_file;
 //    ppm_file.read("img.ppm");
