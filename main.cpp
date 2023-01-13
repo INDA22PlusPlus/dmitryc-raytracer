@@ -129,12 +129,16 @@ public:
     double get_norm() {
         return sqrt(x * x + y * y + z * z);
     }
+
+    void print_cout() {
+        cout << x << " " << y << " " << z << endl;
+    }
 };
 
 // Vec functions
 
 inline std::ostream& operator<<(std::ostream &out, const Vec &v) {
-    return out << v.x << ' ' << v.y << ' ' << v.z;
+    return out << v.x << " " << v.y << " " << v.z << endl;
 }
 
 // Todo: Bracket assignment right?
@@ -211,14 +215,8 @@ int main(int argc,char **argv) {
     for (int y = 0; y < h; y++) {
 //        cout << "Line: " << y + 1 << "/" << h << endl;
         for (int x = 0; x < w; x++) {
-            Vec &color = buf[x][y];
-//            color = Vec(y, abs(y - x), x);
-//            color[0] = y;
-//            color[1] = x;
-//            color[2] = abs(y - x);
-            color.x = x;
-            color.y = y;
-            color.z = abs(y - x);
+            Vec color(x, y, abs(x - y));
+//            Vec color = Vec(0, 20, 0);
             img << color;
         }
     }
