@@ -191,19 +191,21 @@ inline Vec cross(const Vec &u, const Vec &v) {
 //};
 
 
-void create_image(int height, int weight, int max_color_depth) {
+void create_image(int height, int width, int max_color_depth) {
     ofstream img("img.ppm");
 
     img << "P3" << endl;
-    img << height << " " << weight << endl;
+    img << height << " " << width << endl;
     img << max_color_depth << endl;
 
-    Vec buf[height][weight];
+    Vec buf[height][width];
 
+//    for (int y = 0; y < height; y++) {
     for (int y = 0; y < height; y++) {
 //        cout << "Line: " << y + 1 << "/" << height << endl;
-        for (int x = 0; x < weight; x++) {
-            Color color(x, y, abs(x - y));
+        for (int x = 0; x < width; x++) {
+            Color color(int(255.999 * (double(x) / (width - 1))), int(255.999 * (double(height - y) / (height - 1))), int(255.999 * 0.25));
+//            Color color(x, y, abs(x - y));
 //            Color color(200, 0, 0);
             img << color;
         }
@@ -225,8 +227,8 @@ int main(int argc,char **argv) {
 ////    test.norm();
 //    cout << test;
 
-    int h = 255;
-    int w = 255;
+    int h = 256;
+    int w = 256;
     int max_color_depth = 255;
 
     create_image(h, w, max_color_depth);
