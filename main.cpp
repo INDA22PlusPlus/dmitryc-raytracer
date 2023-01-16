@@ -2,7 +2,7 @@
 #include <fstream>
 #include <Magick++.h>
 #include <cmath>
-#include "vec-old.h"
+#include "vec.h"
 using namespace std;
 //using namespace Magick;
 
@@ -14,7 +14,7 @@ void create_image(int height, int width, int max_color_depth) {
     img << height << " " << width << endl;
     img << max_color_depth << endl;
 
-    Vec buf[height][width];
+//    Vec buf[height][width];
 
 //    for (int y = 0; y < height; y++) {
     for (int y = 0; y < height; y++) {
@@ -43,8 +43,8 @@ int main(int argc,char **argv) {
 ////    test.norm();
 //    cout << test;
 
-    int h = 256;
-    int w = 256;
+    int h = 1000;
+    int w = 1000;
     int max_color_depth = 255;
 
     create_image(h, w, max_color_depth);
