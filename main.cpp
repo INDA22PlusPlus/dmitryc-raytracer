@@ -3,7 +3,7 @@
 #include <Magick++.h>
 #include <cmath>
 using namespace std;
-using namespace Magick;
+//using namespace Magick;
 
 
 class Vec {
@@ -135,8 +135,12 @@ public:
     }
 };
 
+using Point = Vec;   // 3D point
+using Color = Vec;
+
 // Vec functions
 
+// Todo: use friend?
 inline std::ostream& operator<<(std::ostream &out, const Vec &v) {
     return out << v.x << " " << v.y << " " << v.z << endl;
 }
@@ -187,6 +191,28 @@ inline Vec cross(const Vec &u, const Vec &v) {
 //};
 
 
+void create_image(int height, int weight, int max_color_depth) {
+    ofstream img("img.ppm");
+
+    img << "P3" << endl;
+    img << height << " " << weight << endl;
+    img << max_color_depth << endl;
+
+    Vec buf[height][weight];
+
+    for (int y = 0; y < height; y++) {
+//        cout << "Line: " << y + 1 << "/" << height << endl;
+        for (int x = 0; x < weight; x++) {
+            Color color(x, y, abs(x - y));
+//            Color color(200, 0, 0);
+            img << color;
+        }
+    }
+
+    img.close();
+}
+
+
 int main(int argc,char **argv) {
     // Todo: Convert images using library instead of third party tools
 //    InitializeMagick(*argv);
@@ -203,25 +229,7 @@ int main(int argc,char **argv) {
     int w = 255;
     int max_color_depth = 255;
 
-    ofstream img("img.ppm");
-
-
-    img << "P3" << endl;
-    img << h << " " << w << endl;
-    img << max_color_depth << endl;
-
-    Vec buf[h][w];
-
-    for (int y = 0; y < h; y++) {
-//        cout << "Line: " << y + 1 << "/" << h << endl;
-        for (int x = 0; x < w; x++) {
-            Vec color(x, y, abs(x - y));
-//            Vec color = Vec(0, 20, 0);
-            img << color;
-        }
-    }
-
-    img.close();
+    create_image(h, w, max_color_depth);
 
 //    Image ppm_file;
 //    ppm_file.read("img.ppm");
