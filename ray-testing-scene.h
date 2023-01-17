@@ -5,12 +5,12 @@
 #include "scene.h"
 #include "ray.h"
 
-class RayTestingScene: Scene {
+class RayTestingScene: public Scene {
 public:
     using Scene::Scene;
 
-    // Blue to white gradient based in y coordinate (up to down), values copied from guide
-    static Color blue_to_white_gradient_in_y_coordinate(const Ray& ray) {
+     // Blue to white gradient based in y coordinate (up to down), values copied from guide
+     virtual Color blue_to_white_gradient_in_y_coordinate(const Ray& ray) {
         double t = 0.5 * (ray.direction.y + 1.0);
         return (1.0 - t) * Color(1.0, 1.0, 1.0) + t * Color(0.5, 0.7, 1.0);
     }
