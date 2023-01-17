@@ -8,7 +8,7 @@ class FirstSphereScene: public RayTestingScene {
 public:
     using RayTestingScene::RayTestingScene;
 
-    bool hit_sphere(const Point& center, double radius, const Ray& ray) {
+    virtual bool hit_sphere(const Point& center, double radius, const Ray& ray) {
         Vec oc = ray.origin - center;
         auto a = dot(ray.direction, ray.direction);
         auto b = 2.0 * dot(oc, ray.direction);
@@ -18,7 +18,7 @@ public:
     }
 
     // Blue to white gradient based in y coordinate (up to down), values copied from guide
-    Color blue_to_white_gradient_in_y_coordinate(const Ray& ray) override {
+    Color blue_to_white_gradient_in_y_coordinate(Ray& ray) override {
         if (hit_sphere(Point(0,0,-1), 0.5, ray)) {
             return {1, 0, 0};
         }
