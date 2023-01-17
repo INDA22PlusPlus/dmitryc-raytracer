@@ -7,18 +7,18 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 set(SOURCE_FILES main.cpp)
 
-add_executable(dmitryc_raytracer main.cpp vec.h ray.h camera.h)
+add_executable(dmitryc_raytracer main.cpp vec.h ray.h camera.h scene.h ray-testing-scene.h)
 
-add_definitions( -DMAGICKCORE_QUANTUM_DEPTH=16 )
-add_definitions( -DMAGICKCORE_HDRI_ENABLE=0 )
-
-find_package(ImageMagick REQUIRED COMPONENTS MagickCore MagickWand Magick++)
-include_directories(${ImageMagick_INCLUDE_DIRS})
-#execute_process(COMMAND Magick++-config --ldflags
-#        OUTPUT_VARIABLE ImageMagick_LINK_FLAGS
-#        OUTPUT_STRIP_TRAILING_WHITESPACE
-#        )
-target_link_libraries(dmitryc_raytracer ${ImageMagick_LIBRARIES})
+#add_definitions( -DMAGICKCORE_QUANTUM_DEPTH=16 )
+#add_definitions( -DMAGICKCORE_HDRI_ENABLE=0 )
+#
+#find_package(ImageMagick REQUIRED COMPONENTS MagickCore MagickWand Magick++)
+#include_directories(${ImageMagick_INCLUDE_DIRS})
+##execute_process(COMMAND Magick++-config --ldflags
+##        OUTPUT_VARIABLE ImageMagick_LINK_FLAGS
+##        OUTPUT_STRIP_TRAILING_WHITESPACE
+##        )
+#target_link_libraries(dmitryc_raytracer ${ImageMagick_LIBRARIES})
 
 
 

@@ -1,7 +1,3 @@
-//
-// Created by chiri on 2023-01-17.
-//
-
 #ifndef DMITRYC_RAYTRACER_CAMERA_H
 #define DMITRYC_RAYTRACER_CAMERA_H
 

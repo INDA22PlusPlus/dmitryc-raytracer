@@ -1,7 +1,3 @@
-//
-// Created by chiri on 2023-01-16.
-//
-
 #ifndef DMITRYC_RAYTRACER_RAY_H
 #define DMITRYC_RAYTRACER_RAY_H
 
