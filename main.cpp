@@ -4,6 +4,7 @@
 #include <cmath>
 #include "vec.h"
 #include "ray.h"
+#include "camera.h"
 
 using namespace std;
 //using namespace Magick;
@@ -39,8 +40,9 @@ void create_image(int height, int width, int max_color_depth) {
     img.close();
 }
 
-Color ray_color(const Ray& ray) {
-    double t = 0.5*(ray.direction.y + 1.0);
+// Blue to white gradient based in y coordinate (up to down), values copied from guide
+Color blue_to_white_gradient_in_y_coordinate(const Ray& ray) {
+    double t = 0.5 * (ray.direction.y + 1.0);
     return (1.0 - t) * Color(1.0, 1.0, 1.0) + t * Color(0.5, 0.7, 1.0);
 }
 
@@ -48,16 +50,9 @@ Color ray_color(const Ray& ray) {
 void create_ray_image(int height, int width, int max_color_depth, double aspect_ratio) {
     // Camera setup
 
-    auto viewport_height = 2.0;
-    auto viewport_width = aspect_ratio * viewport_height;
-    auto focal_length = 1.0;
+    Camera camera(aspect_ratio);
 
-    auto origin = Point(0, 0, 0);
-    auto horizontal = Vec(viewport_width, 0, 0);
-    auto vertical = Vec(0, viewport_height, 0);
-    auto lower_left_corner = origin - horizontal/2 - vertical/2 - Vec(0, 0, focal_length);
-
-
+    // Render image
     ofstream img("img.ppm");
 
     img << "P3" << endl;
@@ -68,10 +63,14 @@ void create_ray_image(int height, int width, int max_color_depth, double aspect_
 
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
-            auto u = double(x) / (width - 1);
-            auto v = double(height - y) / (height - 1);
-            Ray r(origin, lower_left_corner + u*horizontal + v*vertical - origin);
-            Color pixel_color = ray_color(r);
+            // UV interpretation of X (in our case corresponding to U) and Y (corresponding to V) axis
+            // coordinates of a plane (using relative coordinates)
+            double u = double(x) / (width - 1);
+            double v = double(height - y) / (height - 1);
+//            auto v = double(y) / (height - 1);
+            Ray ray(camera.origin,
+                    camera.lower_left_corner + u * camera.horizontal + v * camera.vertical - camera.origin);
+            Color pixel_color = blue_to_white_gradient_in_y_coordinate(ray);
             img << get_converted_color(pixel_color);
         }
     }
@@ -94,8 +93,8 @@ int main(int argc,char **argv) {
     // Settings
 
     const double aspect_ratio = 16.0 / 9.0;
-    const int w = 200;
-    const int h = static_cast<int>(w / aspect_ratio);
+    const int window_width = 200;
+    const int window_height = static_cast<int>(window_width / aspect_ratio);
     const int max_color_depth = 255;
 
 //    // Camera setup
@@ -109,9 +108,9 @@ int main(int argc,char **argv) {
 //    auto vertical = Vec(0, viewport_height, 0);
 //    auto lower_left_corner = origin - horizontal/2 - vertical/2 - Vec(0, 0, focal_length);
 
-//    create_image(h, w, max_color_depth);
+//    create_image(window_height, window_width, max_color_depth);
 
-    create_ray_image(h, w, max_color_depth, aspect_ratio);
+    create_ray_image(window_height, window_width, max_color_depth, aspect_ratio);
 
 //    Vec v1 = Vec(1, 2, 2);
 //    Ray ray(Point(0, 0, 0), v1);
