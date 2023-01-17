@@ -63,9 +63,9 @@ public:
     // Todo: Better syntax?
     Color get_converted_color(Color pixel_color) {
         // Convert back the relative color values from a range of 0-1 to color depth
-        return Color(static_cast<int>(255.999 * pixel_color.x),
-                     static_cast<int>(255.999 * pixel_color.y),
-                     static_cast<int>(255.999 * pixel_color.z));
+        return Color(static_cast<int>((max_color_depth + 0.999) * pixel_color.x),
+                     static_cast<int>((max_color_depth + 0.999) * pixel_color.y),
+                     static_cast<int>((max_color_depth + 0.999) * pixel_color.z));
     }
 
     // Todo: Make abstract
