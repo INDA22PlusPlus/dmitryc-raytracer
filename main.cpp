@@ -3,9 +3,18 @@
 #include <Magick++.h>
 #include <cmath>
 #include "vec.h"
+#include "ray.h"
+
 using namespace std;
 //using namespace Magick;
 
+
+Color get_converted_color(Color pixel_color) {
+    // Write the translated [0,255] value of each color component.
+    return Color(static_cast<int>(255.999 * pixel_color.x),
+                 static_cast<int>(255.999 * pixel_color.y),
+                 static_cast<int>(255.999 * pixel_color.z));
+}
 
 void create_image(int height, int width, int max_color_depth) {
     ofstream img("img.ppm");
@@ -30,6 +39,45 @@ void create_image(int height, int width, int max_color_depth) {
     img.close();
 }
 
+Color ray_color(const Ray& ray) {
+    double t = 0.5*(ray.direction.y + 1.0);
+    return (1.0 - t) * Color(1.0, 1.0, 1.0) + t * Color(0.5, 0.7, 1.0);
+}
+
+
+void create_ray_image(int height, int width, int max_color_depth, double aspect_ratio) {
+    // Camera setup
+
+    auto viewport_height = 2.0;
+    auto viewport_width = aspect_ratio * viewport_height;
+    auto focal_length = 1.0;
+
+    auto origin = Point(0, 0, 0);
+    auto horizontal = Vec(viewport_width, 0, 0);
+    auto vertical = Vec(0, viewport_height, 0);
+    auto lower_left_corner = origin - horizontal/2 - vertical/2 - Vec(0, 0, focal_length);
+
+
+    ofstream img("img.ppm");
+
+    img << "P3" << endl;
+    img << width << " " << height << endl;
+    img << max_color_depth << endl;
+
+//    Vec buf[height][width];
+
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            auto u = double(x) / (width - 1);
+            auto v = double(height - y) / (height - 1);
+            Ray r(origin, lower_left_corner + u*horizontal + v*vertical - origin);
+            Color pixel_color = ray_color(r);
+            img << get_converted_color(pixel_color);
+        }
+    }
+
+    img.close();
+}
 
 int main(int argc,char **argv) {
     // Todo: Convert images using library instead of third party tools
@@ -43,11 +91,32 @@ int main(int argc,char **argv) {
 ////    test.norm();
 //    cout << test;
 
-    int h = 1000;
-    int w = 1000;
-    int max_color_depth = 255;
+    // Settings
 
-    create_image(h, w, max_color_depth);
+    const double aspect_ratio = 16.0 / 9.0;
+    const int w = 200;
+    const int h = static_cast<int>(w / aspect_ratio);
+    const int max_color_depth = 255;
+
+//    // Camera setup
+//
+//    auto viewport_height = 2.0;
+//    auto viewport_width = aspect_ratio * viewport_height;
+//    auto focal_length = 1.0;
+//
+//    auto origin = Point(0, 0, 0);
+//    auto horizontal = Vec(viewport_width, 0, 0);
+//    auto vertical = Vec(0, viewport_height, 0);
+//    auto lower_left_corner = origin - horizontal/2 - vertical/2 - Vec(0, 0, focal_length);
+
+//    create_image(h, w, max_color_depth);
+
+    create_ray_image(h, w, max_color_depth, aspect_ratio);
+
+//    Vec v1 = Vec(1, 2, 2);
+//    Ray ray(Point(0, 0, 0), v1);
+//
+//    v1.x -= 1;
 
 //    Image ppm_file;
 //    ppm_file.read("img.ppm");

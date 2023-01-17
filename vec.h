@@ -37,7 +37,6 @@ public:
 //        this->z = z;
 //    }
 
-    // Todo: Why const and explicit tho?
     explicit Vec(const double arr[3]) {
         x = arr[0];
         y = arr[1];
@@ -131,6 +130,13 @@ public:
 
     double get_norm() {
         return sqrt(x * x + y * y + z * z);
+    }
+
+    // Todo: Better way to do this?
+    Vec get_normalized() {
+        Vec copy = Vec(x, y, z);
+        copy.norm();
+        return copy;
     }
 
     void print_cout() {
