@@ -13,6 +13,7 @@ public:
     int max_color_depth;
 
     string default_img_path = "img.ppm";
+    bool show_progress = false;
 
     Scene() {
         aspect_ratio = 16.0 / 9.0;

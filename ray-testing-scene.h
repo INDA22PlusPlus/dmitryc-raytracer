@@ -30,7 +30,11 @@ public:
         //       is needed for that
 //        Vec buf[height][width];
 
+        int hundredth_part = window_height / 100;
         for (int y = 0; y < window_height; y++) {
+            if (y % hundredth_part == 0 and show_progress) {
+                cout << y / hundredth_part << "%" << endl;
+            }
             for (int x = 0; x < window_width; x++) {
                 // UV interpretation of X (in our case corresponding to U) and Y (corresponding to V) axis
                 // coordinates of a plane (using relative coordinates)
