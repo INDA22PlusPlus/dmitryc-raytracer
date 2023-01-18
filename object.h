@@ -9,18 +9,41 @@ class HitData {
 public:
     Point point;
     Vec normal;
-    double t;
+    double t = 0;
+    bool front_face = true;
+
+    HitData() = default;
+
+    HitData(Point point, Vec normal, double t, bool front_face) {
+        this->point = point;
+        this->normal = normal;
+        this->t = t;
+        this->front_face = front_face;
+    }
 
     void update_data(double new_t, Ray ray, Point center, double radius) {
         t = new_t;
         point = ray.end_at_mult_const(t);
-        normal = (point - center) / radius;
+        Vec out_normal = (point - center) / radius;
+        set_face_and_normal(ray, out_normal);
+    }
+
+    void set_face_and_normal(Ray& ray, Vec& out_normal) {
+        // Flipping the face depending on the dot product
+        front_face = dot(ray.direction, out_normal) < 0;
+        // Changes the normal accordingly
+        normal = front_face ? out_normal : -out_normal;
     }
 };
 
 class Object {
 public:
     double t_min, t_max;
+
+    Object(double t_min, double t_max) {
+        this->t_min = t_min;
+        this->t_max = t_max;
+    }
 
     virtual bool hit(Ray& ray, HitData hit_data) {
 
@@ -32,7 +55,7 @@ public:
     Point center;
     double radius;
 
-    Sphere(Point center, double radius) {
+    Sphere(Point center, double radius, double t_min, double t_max) : Object(t_min, t_max) {
         this->center = center;
         this->radius = radius;
     }
