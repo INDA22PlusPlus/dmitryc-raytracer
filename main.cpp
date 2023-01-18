@@ -16,6 +16,7 @@
 using namespace std;
 //using namespace Magick;
 
+// Todo: ANTIALIASING
 int main(int argc,char **argv) {
     // Todo: Convert images using library instead of third party tools
 

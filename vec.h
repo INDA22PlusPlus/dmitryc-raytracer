@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include <cmath>
+#include "additionals.h"
 
 using namespace std;
 
@@ -145,6 +146,24 @@ public:
 
     void print_cout() {
         cout << x << " " << y << " " << z << endl;
+    }
+
+    // Random functions taken from the guide
+    inline static Vec random() {
+        return Vec(random_double(), random_double(), random_double());
+    }
+
+    inline static Vec random(double min, double max) {
+        return Vec(random_double(min,max), random_double(min,max), random_double(min,max));
+    }
+
+    // Todo: Better implementation please
+    Vec random_in_unit_sphere() {
+        while (true) {
+            Vec p = random(-1,1);
+            if (p.get_norm_squared() >= 1) continue;
+            return p;
+        }
     }
 };
 

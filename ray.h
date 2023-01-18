@@ -1,8 +1,8 @@
 #ifndef DMITRYC_RAYTRACER_RAY_H
 #define DMITRYC_RAYTRACER_RAY_H
 
+
 #include "vec.h"
-#include "camera.h"
 
 // Todo: consider introducing variable as constants (need to decide whether rays should be mutable or not)
 class Ray {

@@ -2,6 +2,7 @@
 #define DMITRYC_RAYTRACER_CAMERA_H
 
 #include "vec.h"
+#include "ray.h"
 
 // Todo: Implement different coordinate systems
 class Camera {
@@ -46,6 +47,11 @@ public:
         vertical = Vec(0, height, 0);
         lower_left_corner = origin - horizontal/2 - vertical/2 - Vec(0, 0, focal_length);
     }
+
+    // Todo: Don't know why it's not working, should fix this later
+//    Ray get_ray(double u, double v) {
+//        return Ray(origin, lower_left_corner + u)
+//    }
 };
 
 #endif //DMITRYC_RAYTRACER_CAMERA_H
