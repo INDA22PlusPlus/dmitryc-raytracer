@@ -17,9 +17,10 @@ using namespace std;
 int main(int argc,char **argv) {
     // Todo: Convert images using library instead of third party tools
 
-    SimpleImageTestingScene scene(16.0 / 9.0, 400, 255);
+//    SimpleImageTestingScene scene(16.0 / 9.0, 400, 255);
 //    RayTestingScene scene(16.0 / 9.0, 400, 255);
-//    ShadedSphereScene scene(16.0 / 9.0, 400, 255);
+//    FirstSphereScene scene(16.0 / 9.0, 400, 255);
+    ShadedSphereScene scene(16.0 / 9.0, 400, 255);
 //    scene.show_progress = true;
     scene.render_to_ppm_img();
 

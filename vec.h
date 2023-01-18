@@ -146,6 +146,7 @@ public:
 
 using Point = Vec;   // 3D point
 using Color = Vec;
+using Pixel = Vec;
 
 // Vec functions
 

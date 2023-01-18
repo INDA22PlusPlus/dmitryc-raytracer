@@ -18,7 +18,7 @@ public:
     }
 
     // Blue to white gradient based in y coordinate (up to down), values copied from guide
-    Color blue_to_white_gradient_in_y_coordinate(Ray& ray) override {
+    Pixel get_pixel_color_from_ray(Ray& ray) override {
         if (hit_sphere(Point(0,0,-1), 0.5, ray)) {
             return {1, 0, 0};
         }
