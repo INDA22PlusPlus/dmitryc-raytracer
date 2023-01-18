@@ -10,6 +10,7 @@
 #include "first-sphere-scene.h"
 #include "shaded-sphere-scene.h"
 #include "simple-image-testing-scene.h"
+#include "sphere-and-plane-scene.h"
 
 using namespace std;
 //using namespace Magick;
@@ -20,7 +21,8 @@ int main(int argc,char **argv) {
 //    SimpleImageTestingScene scene(16.0 / 9.0, 400, 255);
 //    RayTestingScene scene(16.0 / 9.0, 400, 255);
 //    FirstSphereScene scene(16.0 / 9.0, 400, 255);
-    ShadedSphereScene scene(16.0 / 9.0, 400, 255);
+//    ShadedSphereScene scene(16.0 / 9.0, 400, 255);
+    SphereAndPlaneScene scene(16.0 / 9.0, 400, 255);
 //    scene.show_progress = true;
     scene.render_to_ppm_img();
 

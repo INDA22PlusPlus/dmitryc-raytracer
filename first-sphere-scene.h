@@ -11,7 +11,7 @@ public:
     virtual bool hit_sphere(const Point& center, double radius, const Ray& ray) {
         // OC vector = v
         Vec v = ray.origin - center;
-        auto a = dot(ray.direction, ray.direction);
+        auto a = ray.direction.get_norm_squared();
         auto b = 2.0 * dot(v, ray.direction);
         auto c = dot(v, v) - radius * radius;
         auto discriminant = b * b - 4 * a * c;
@@ -20,7 +20,7 @@ public:
     }
 
     // Simple test with one red sphere
-    Pixel get_pixel_color_from_ray(Ray& ray) override {
+    virtual Pixel get_pixel_color_from_ray(Ray& ray) override {
         if (hit_sphere(Point(0,0,-1), 0.25, ray)) {
             return {1, 0, 0};
         }

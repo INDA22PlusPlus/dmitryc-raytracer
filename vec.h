@@ -132,7 +132,7 @@ public:
         return sqrt(get_norm_squared());
     }
 
-    double get_norm_squared() {
+    double get_norm_squared() const {
         return x * x + y * y + z * z;
     }
 
