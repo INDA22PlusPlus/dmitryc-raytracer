@@ -38,15 +38,18 @@ public:
 
 class Object {
 public:
-    double t_min, t_max;
+    double t_min = 0;
+    double t_max = 0;
+
+    Object() = default;
 
     Object(double t_min, double t_max) {
         this->t_min = t_min;
         this->t_max = t_max;
     }
 
-    virtual bool hit(Ray& ray, HitData hit_data) {
-
+    virtual bool hit(Ray& ray, HitData& hit_data) {
+        return false;
     }
 };
 
