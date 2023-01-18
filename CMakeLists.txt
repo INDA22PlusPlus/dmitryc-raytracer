@@ -7,7 +7,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 set(SOURCE_FILES main.cpp)
 
-add_executable(dmitryc_raytracer main.cpp vec.h ray.h camera.h scene.h ray-testing-scene.h first-sphere-scene.h shaded-sphere-scene.h simple-image-testing-scene.h sphere-and-plane-scene.h)
+add_executable(dmitryc_raytracer main.cpp vec.h ray.h camera.h scene.h ray-testing-scene.h first-sphere-scene.h shaded-sphere-scene.h simple-image-testing-scene.h sphere-and-plane-scene.h object.h)
 
 #add_definitions( -DMAGICKCORE_QUANTUM_DEPTH=16 )
 #add_definitions( -DMAGICKCORE_HDRI_ENABLE=0 )

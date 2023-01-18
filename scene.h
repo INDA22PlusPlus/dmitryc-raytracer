@@ -82,7 +82,7 @@ public:
     // Todo: Better syntax?
     Pixel get_converted_color(Pixel pixel_color) {
         // Convert back the relative color values from a range of 0-1 to color depth
-        return Color(static_cast<int>((max_color_depth + 0.999) * pixel_color.x),
+        return Pixel(static_cast<int>((max_color_depth + 0.999) * pixel_color.x),
                      static_cast<int>((max_color_depth + 0.999) * pixel_color.y),
                      static_cast<int>((max_color_depth + 0.999) * pixel_color.z));
     }
