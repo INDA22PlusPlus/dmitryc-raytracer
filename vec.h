@@ -129,7 +129,11 @@ public:
     }
 
     double get_norm() {
-        return sqrt(x * x + y * y + z * z);
+        return sqrt(get_norm_squared());
+    }
+
+    double get_norm_squared() {
+        return x * x + y * y + z * z;
     }
 
     // Todo: Better way to do this?

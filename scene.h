@@ -71,11 +71,12 @@ public:
 //        frame_buf[window_height][window_width];
     }
 
-//    Pixel get_converted_color(Pixel) {
-//        return Pixel();
-//    }
+    // Casts rays, gets the color at which the ray ends after all manipulations. Default implementation if no ray
+    // hits anything is interpreted as a background hit, which in this case is a gradient between blue and white.
     virtual Pixel get_pixel_color_from_ray(Ray& ray) {
-        // Code?
+        // Blue to white background, if no objects hit
+        double t = 0.5 * (ray.direction.y + 1.0);
+        return (1.0 - t) * Color(1.0, 1.0, 1.0) + t * Color(0.5, 0.7, 1.0);
     }
 
     // Todo: Better syntax?
