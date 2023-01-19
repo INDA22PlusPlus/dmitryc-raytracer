@@ -23,8 +23,12 @@ int main(int argc,char **argv) {
     Scene scene(16.0 / 9.0, 400, 255);
     scene.add_object(make_shared<Sphere>(Point(0,0,-1), 0.5,0.001, infinity,
                                          make_shared<Lambertian>(Color(1, 0, 0))));
-    scene.add_object(make_shared<Sphere>(Point(-1,-0.25,-1), 0.25, 0.001, infinity,
+    scene.add_object(make_shared<Sphere>(Point(-0.75,-0.25,-1), 0.25, 0.001, infinity,
                                          make_shared<Lambertian>(Color(0, 0, 1))));
+    scene.add_object(make_shared<Sphere>(Point(-2,0.85,-3), 1, 0.001, infinity,
+                                         make_shared<Metal>(Color(0.8, 0.8, 0.8))));
+    scene.add_object(make_shared<Sphere>(Point(-0.4,-0.4,-0.85), 0.1, 0.001, infinity,
+                                         make_shared<Metal>(Color(0.8, 0.8, 0.8))));
     scene.add_object(make_shared<Sphere>(Point(0,-100.5,-1), 100, 0.001, infinity,
                                          make_shared<Lambertian>(Color(0, 1, 0))));
 

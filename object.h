@@ -117,8 +117,8 @@ public:
     // <=> Albedo
     Color proportion_reflected;
 
-    explicit Lambertian(const Color& albedo) {
-        this->proportion_reflected = albedo;
+    explicit Lambertian(const Color& proportion_reflected) {
+        this->proportion_reflected = proportion_reflected;
     }
 
     bool scatter(const Ray& ray_in, const HitData& hit_data, Color& color_reduction, Ray& scattered_ray) const override {
@@ -126,12 +126,31 @@ public:
         Vec scatter_direction = hit_data.normal + Vec::random_unit_sphere();
 
         // Catch degenerate scatter direction
-        if (scatter_direction.near_zero())
+        if (scatter_direction.near_zero()) {
             scatter_direction = hit_data.normal;
+        }
 
         scattered_ray = Ray(hit_data.point, scatter_direction);
         color_reduction = proportion_reflected;
         return true;
+    }
+};
+
+class Metal : public Material {
+public:
+    Color proportion_reflected;
+
+    explicit Metal(const Color& proportion_reflected) {
+        this->proportion_reflected = proportion_reflected;
+    }
+
+    bool scatter(const Ray& ray_in, const HitData& hit_data, Color& color_reduction, Ray& scattered_ray) const override {
+        // Reflects about normal
+        Vec reflected_direction = Vec::reflect(ray_in.direction.get_normalized(), hit_data.normal);
+        scattered_ray = Ray(hit_data.point, reflected_direction);
+        color_reduction = proportion_reflected;
+        // Check for right direction
+        return (dot(scattered_ray.direction, hit_data.normal) > 0);
     }
 };
 

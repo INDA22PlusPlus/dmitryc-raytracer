@@ -16,6 +16,16 @@ constexpr static const double near_zero_constant = 1e-9;
 // Todo: wtf? just find a better fix
 class Vec;
 inline double dot(const Vec &u, const Vec &v);
+inline std::ostream& operator<<(std::ostream &out, const Vec &v);
+inline Vec operator+(const Vec &u, const Vec &v);
+inline Vec operator-(const Vec &u, const Vec &v);
+inline Vec operator*(const Vec &u, const Vec &v);
+inline Vec operator*(double t, const Vec &v);
+inline Vec operator*(const Vec &v, double t);
+inline Vec operator/(Vec v, double t);
+inline double dot(const Vec &u, const Vec &v);
+inline Vec cross(const Vec &u, const Vec &v);
+
 
 class Vec {
 public:
@@ -132,20 +142,20 @@ public:
 //        return arr;
 //    }
 
-    void norm() {
+    inline void norm() {
         *this /= get_norm();
     }
 
-    double get_norm() {
+    inline double get_norm() const {
         return sqrt(get_norm_squared());
     }
 
-    double get_norm_squared() const {
+    inline double get_norm_squared() const {
         return x * x + y * y + z * z;
     }
 
     // Todo: Better way to do this?
-    Vec get_normalized() {
+    inline Vec get_normalized() const {
         Vec copy = Vec(x, y, z);
         copy.norm();
         return copy;
@@ -190,6 +200,11 @@ public:
         return (fabs(x) < near_zero_constant) &&
                (fabs(y) < near_zero_constant) &&
                (fabs(z) < near_zero_constant);
+    }
+
+    // Reflects about normal using reflection formula
+    static Vec reflect(const Vec& v, const Vec normal) {
+        return v - 2 * dot(v,normal) * normal;
     }
 };
 
