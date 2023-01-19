@@ -165,6 +165,10 @@ public:
             return p;
         }
     }
+
+    static Vec random_unit_sphere() {
+        return random_in_unit_sphere().get_normalized();
+    }
 };
 
 using Point = Vec;   // 3D point
