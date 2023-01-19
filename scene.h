@@ -16,6 +16,7 @@ public:
     int max_color_depth;
 
     int max_depth = 5;
+    int samples_per_pixel = 100;
 
     string default_img_path = "img.ppm";
     bool show_progress = false;
@@ -84,6 +85,10 @@ public:
         HitData hit_data;
         objects.t_max = infinity;
 
+//        if (objects.hit(ray, hit_data)) {
+//            return 0.5 * (hit_data.normal + Pixel(1,1,1));
+//        }
+
         if (depth <= 0) {
             return {0, 0, 0};
         }
@@ -94,6 +99,7 @@ public:
             Ray temp_ray(hit_data.point, target - hit_data.point);
             return 0.5 * get_pixel_color_from_ray(temp_ray, depth - 1);
         }
+
         // Blue to white background, if no objects hit
         double t = 0.5 * (ray.direction.y + 1.0);
         return (1.0 - t) * Color(1.0, 1.0, 1.0) + t * Color(0.5, 0.7, 1.0);
@@ -101,10 +107,20 @@ public:
 
     // Todo: Better syntax?
     Pixel get_converted_color(Pixel pixel_color) {
+        auto r = pixel_color.x;
+        auto g = pixel_color.y;
+        auto b = pixel_color.z;
+
+        // Divide the color by the number of samples.
+        // TODO: change manual constant
+        auto scale = 0.003;
+        r = sqrt(scale * r);
+        g = sqrt(scale * g);
+        b = sqrt(scale * b);
         // Convert back the relative color values from a range of 0-1 to color depth
-        return Pixel(static_cast<int>((max_color_depth + 0.999) * pixel_color.x),
-                     static_cast<int>((max_color_depth + 0.999) * pixel_color.y),
-                     static_cast<int>((max_color_depth + 0.999) * pixel_color.z));
+        return Pixel(static_cast<int>(256 * clamp(r, 0.0, 0.999)),
+                     static_cast<int>(256 * clamp(g, 0.0, 0.999)),
+                     static_cast<int>(256 * clamp(b, 0.0, 0.999)));
     }
 
 
@@ -138,14 +154,17 @@ public:
                 cout << y / hundredth_part << "%" << endl;
             }
             for (int x = 0; x < window_width; x++) {
-                // UV interpretation of X (in our case corresponding to U) and Y (corresponding to V) axis
-                // coordinates of a plane (using relative coordinates)
-                double u = static_cast<double>(x) / (window_width - 1);
-                double v = static_cast<double>(window_height - y) / (window_height - 1);
+                Pixel pixel_color(0, 0, 0);
+                for (int i = 0; i < max_color_depth; i++) {
+                    // UV interpretation of X (in our case corresponding to U) and Y (corresponding to V) axis
+                    // coordinates of a plane (using relative coordinates)
+                    double u = static_cast<double>(x + random_double()) / (window_width - 1);
+                    double v = static_cast<double>(window_height - y + random_double()) / (window_height - 1);
 //                double v = static_cast<double>(y) / (window_height - 1);
-                Ray ray(camera.origin,
-                        camera.lower_left_corner + u * camera.horizontal + v * camera.vertical - camera.origin);
-                Pixel pixel_color = get_pixel_color_from_ray(ray, max_depth);
+                    Ray ray(camera.origin,
+                            camera.lower_left_corner + u * camera.horizontal + v * camera.vertical - camera.origin);
+                    pixel_color += get_pixel_color_from_ray(ray, max_depth);
+                }
                 img << get_converted_color(pixel_color);
             }
         }

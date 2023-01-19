@@ -21,8 +21,8 @@ int main(int argc,char **argv) {
     // Todo: Convert images using library instead of third party tools
 
     Scene scene(16.0 / 9.0, 400, 255);
-    scene.add_object(make_shared<Sphere>(Point(0,0,-1), 0.25, 0, infinity));
-    scene.add_object(make_shared<Sphere>(Point(0,-100.5,-1), 100, 0, infinity));
+    scene.add_object(make_shared<Sphere>(Point(0,0,-1), 0.25, 0.001, infinity));
+    scene.add_object(make_shared<Sphere>(Point(0,-100.5,-1), 100, 0.001, infinity));
 
 //    SimpleImageTestingScene scene(16.0 / 9.0, 400, 255);
 //    RayTestingScene scene(16.0 / 9.0, 400, 255);
