@@ -10,6 +10,10 @@
 
 using namespace std;
 
+// Todo: wtf? just find a better fix
+class Vec;
+inline double dot(const Vec &u, const Vec &v);
+
 class Vec {
 public:
     // Variables
@@ -168,6 +172,14 @@ public:
 
     static Vec random_unit_sphere() {
         return random_in_unit_sphere().get_normalized();
+    }
+
+    Vec random_in_hemisphere(const Vec& normal) {
+        Vec in_unit_sphere = random_in_unit_sphere();
+        if (dot(in_unit_sphere, normal) > 0.0) // In the same hemisphere as the normal
+            return in_unit_sphere;
+        else
+            return -in_unit_sphere;
     }
 };
 

@@ -5,12 +5,21 @@
 #include "vec.h"
 #include "ray.h"
 
+
+class HitData;
+
+class Material {
+public:
+    virtual bool scatter(const Ray& r_in, const HitData& rec, Color& attenuation, Ray& scattered) const = 0;
+};
+
 class HitData {
 public:
     Point point;
     Vec normal;
     double t = 0;
     bool front_face = true;
+    shared_ptr<Material> mat_ptr;
 
     HitData() = default;
 
@@ -57,10 +66,12 @@ class Sphere: public Object {
 public:
     Point center;
     double radius;
+    shared_ptr<Material> material;
 
-    Sphere(Point center, double radius, double t_min, double t_max) : Object(t_min, t_max) {
+    Sphere(Point center, double radius, shared_ptr<Material> material, double t_min, double t_max) : Object(t_min, t_max) {
         this->center = center;
         this->radius = radius;
+        this->material = material;
     }
 
     bool hit(Ray& ray, HitData& hit_data) {
