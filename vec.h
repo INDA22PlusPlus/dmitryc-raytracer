@@ -10,6 +10,9 @@
 
 using namespace std;
 
+constexpr static const double near_zero_constant = 1e-9;
+
+
 // Todo: wtf? just find a better fix
 class Vec;
 inline double dot(const Vec &u, const Vec &v);
@@ -18,9 +21,6 @@ class Vec {
 public:
     // Variables
     double x, y, z;
-
-
-    constexpr static const double near_zero_constant = 1e-8;
 
     // Todo: Doesn't work
 //    double& r = x;

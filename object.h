@@ -2,6 +2,8 @@
 #ifndef DMITRYC_RAYTRACER_OBJECT_H
 #define DMITRYC_RAYTRACER_OBJECT_H
 
+#include <utility>
+
 #include "vec.h"
 #include "ray.h"
 
@@ -13,7 +15,7 @@ public:
     Vec normal;
     double t = 0;
     bool front_face = true;
-    shared_ptr<Material> mat_ptr;
+    shared_ptr<Material> material_ptr;
 
     HitData() = default;
 
@@ -24,11 +26,12 @@ public:
         this->front_face = front_face;
     }
 
-    void update_data(double new_t, Ray ray, Point center, double radius) {
+    void update_data(double new_t, Ray ray, Point center, double radius, shared_ptr<Material> material_ptr) {
         t = new_t;
         point = ray.end_at_mult_const(t);
         Vec out_normal = (point - center) / radius;
         set_face_and_normal(ray, out_normal);
+        this->material_ptr = std::move(material_ptr);
     }
 
     void set_face_and_normal(Ray& ray, Vec& out_normal) {
@@ -60,15 +63,15 @@ class Sphere: public Object {
 public:
     Point center;
     double radius;
-    shared_ptr<Material> material;
+    shared_ptr<Material> material_ptr;
 
-    Sphere(Point center, double radius, double t_min, double t_max, shared_ptr<Material> material) : Object(t_min, t_max) {
+    Sphere(Point center, double radius, double t_min, double t_max, shared_ptr<Material> material_ptr) : Object(t_min, t_max) {
         this->center = center;
         this->radius = radius;
-        this->material = material;
+        this->material_ptr = material_ptr;
     }
 
-    bool hit(Ray& ray, HitData& hit_data) {
+    bool hit(Ray& ray, HitData& hit_data) override {
         Vec v = ray.origin - center;
         double a = ray.direction.get_norm_squared();
         // Optimized version with b = 2h, so that the 2 can be factored out and simplified
@@ -94,7 +97,7 @@ public:
             }
         }
 
-        hit_data.update_data(root, ray, center, radius);
+        hit_data.update_data(root, ray, center, radius, material_ptr);
 
         return true;
     }
@@ -103,8 +106,8 @@ public:
 // Todo: mve outside, separate, causes too many errors for now
 class Material {
 public:
-    virtual bool scatter(Ray& ray_in, HitData& hit_data, Color& color_reduction, Ray& scattered) const {
-//        return false;
+    virtual bool scatter(const Ray& ray_in, const HitData& hit_data, Color& color_reduction, Ray& scattered_ray) const {
+        return false;
     };
 };
 
@@ -114,11 +117,11 @@ public:
     // <=> Albedo
     Color proportion_reflected;
 
-    Lambertian(const Color& albedo) {
+    explicit Lambertian(const Color& albedo) {
         this->proportion_reflected = albedo;
     }
 
-    virtual bool scatter(Ray& ray_in, HitData& hit_data, Color& color_reduction, Ray& scattered) const override {
+    bool scatter(const Ray& ray_in, const HitData& hit_data, Color& color_reduction, Ray& scattered_ray) const override {
         // Scatter slightly randomly
         Vec scatter_direction = hit_data.normal + Vec::random_unit_sphere();
 
@@ -126,7 +129,7 @@ public:
         if (scatter_direction.near_zero())
             scatter_direction = hit_data.normal;
 
-        scattered = Ray(hit_data.point, scatter_direction);
+        scattered_ray = Ray(hit_data.point, scatter_direction);
         color_reduction = proportion_reflected;
         return true;
     }
