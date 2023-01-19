@@ -15,8 +15,8 @@ public:
     int window_height;
     int max_color_depth;
 
-    int max_depth = 5;
-    int samples_per_pixel = 100;
+    int max_depth = 10;
+    int samples_per_pixel = 10000;
 
     string default_img_path = "img.ppm";
     bool show_progress = false;
@@ -79,6 +79,17 @@ public:
 //        frame_buf[window_height][window_width];
     }
 
+    // Light blue to white background
+    static Color get_background_color(Ray ray) {
+//        double t = 0.5 * (ray.direction.y + 1.0);
+////        return (1.0 - t) * Color(1.0, 1.0, 1.0) + t * Color(0.5, 0.7, 1.0);
+//        // Darker color
+//        return (1.0 - t) * Color(0.5, 0.5, 0.5) + t * Color(0.1, 0.3, 0.6);
+//        return {0.1, 0.1, 0.1};
+//        return {0.01, 0.01, 0.01};
+        return {0, 0, 0};
+    }
+
     // Casts rays, gets the color at which the ray ends after all manipulations. Default implementation if no ray
     // hits anything is interpreted as a background hit, which in this case is a gradient between blue and white.
     virtual Pixel get_pixel_color_from_ray(Ray& ray, int depth) {
@@ -93,17 +104,21 @@ public:
             return {0, 0, 0};
         }
 
-        if (objects.hit(ray, hit_data)) {
-            Ray scattered_ray;
-            Color color_reduction;
-            if (hit_data.material_ptr->scatter(ray, hit_data, color_reduction, scattered_ray))
-                return color_reduction * get_pixel_color_from_ray(scattered_ray, depth-1);
-            return {0,0,0};
+        // Blue to white background, if no objects hit, first because no hits could be encountered more often
+        if (!objects.hit(ray, hit_data)) {
+            return get_background_color(ray);
         }
 
-        // Blue to white background, if no objects hit
-        double t = 0.5 * (ray.direction.y + 1.0);
-        return (1.0 - t) * Color(1.0, 1.0, 1.0) + t * Color(0.5, 0.7, 1.0);
+        Ray scattered_ray;
+        Color color_reduction;
+        Color emitted_color = hit_data.material_ptr->emitted(hit_data.point);
+
+        if (!hit_data.material_ptr->scatter(ray, hit_data, color_reduction, scattered_ray)) {
+            return emitted_color;
+        }
+
+        return emitted_color + color_reduction * get_pixel_color_from_ray(scattered_ray, depth-1);
+
     }
 
     // Todo: Better syntax?

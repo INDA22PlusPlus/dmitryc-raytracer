@@ -109,6 +109,10 @@ public:
     virtual bool scatter(const Ray& ray_in, const HitData& hit_data, Color& color_reduction, Ray& scattered_ray) const {
         return false;
     };
+
+    virtual Color emitted(const Point& point) const {
+        return {0,0,0};
+    }
 };
 
 // Lambertian lighting based materials
@@ -133,6 +137,25 @@ public:
         scattered_ray = Ray(hit_data.point, scatter_direction);
         color_reduction = proportion_reflected;
         return true;
+    }
+};
+
+class DiffuseLight: public Material  {
+public:
+    Color color = Color(1, 1, 1);
+
+    DiffuseLight() = default;
+
+    explicit DiffuseLight(Color color) {
+        this->color = color;
+    }
+
+    bool scatter(const Ray& ray_in, const HitData& hit_data, Color& color_reduction, Ray& scattered_ray) const override {
+        return false;
+    };
+
+    Color emitted(const Point& p) const override {
+        return color;
     }
 };
 
