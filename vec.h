@@ -158,7 +158,7 @@ public:
     }
 
     // Todo: Better implementation please
-    Vec random_in_unit_sphere() {
+    static Vec random_in_unit_sphere() {
         while (true) {
             Vec p = random(-1,1);
             if (p.get_norm_squared() >= 1) continue;

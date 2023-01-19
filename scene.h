@@ -4,6 +4,7 @@
 #include "camera.h"
 #include "object-list.h"
 #include "additionals.h"
+#include "vec.h"
 
 class Scene {
 public:
@@ -13,6 +14,8 @@ public:
     int window_width;
     int window_height;
     int max_color_depth;
+
+    int max_depth = 5;
 
     string default_img_path = "img.ppm";
     bool show_progress = false;
@@ -77,11 +80,19 @@ public:
 
     // Casts rays, gets the color at which the ray ends after all manipulations. Default implementation if no ray
     // hits anything is interpreted as a background hit, which in this case is a gradient between blue and white.
-    virtual Pixel get_pixel_color_from_ray(Ray& ray) {
+    virtual Pixel get_pixel_color_from_ray(Ray& ray, int depth) {
         HitData hit_data;
         objects.t_max = infinity;
+
+        if (depth <= 0) {
+            return {0, 0, 0};
+        }
+
         if (objects.hit(ray, hit_data)) {
-            return 0.5 * (hit_data.normal + Pixel(1,1,1));
+            // Recursive calling of get_pixel to bounce multiple times
+            Point target = hit_data.point + hit_data.normal + Vec::random_in_unit_sphere();
+            Ray temp_ray(hit_data.point, target - hit_data.point);
+            return 0.5 * get_pixel_color_from_ray(temp_ray, depth - 1);
         }
         // Blue to white background, if no objects hit
         double t = 0.5 * (ray.direction.y + 1.0);
@@ -134,7 +145,7 @@ public:
 //                double v = static_cast<double>(y) / (window_height - 1);
                 Ray ray(camera.origin,
                         camera.lower_left_corner + u * camera.horizontal + v * camera.vertical - camera.origin);
-                Pixel pixel_color = get_pixel_color_from_ray(ray);
+                Pixel pixel_color = get_pixel_color_from_ray(ray, max_depth);
                 img << get_converted_color(pixel_color);
             }
         }

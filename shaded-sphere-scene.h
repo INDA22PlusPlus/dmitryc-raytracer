@@ -27,7 +27,7 @@ public:
     }
 
     // Test to color the sphere with a gradient
-    Pixel get_pixel_color_from_ray(Ray& ray) override {
+    Pixel get_pixel_color_from_ray(Ray& ray, int depth) override {
         double t = hit_sphere_gradient(Point(0, 0, -1), 0.25, ray);
         if (t > 0.0) {
             // Normal to the sphere, used for the gradient

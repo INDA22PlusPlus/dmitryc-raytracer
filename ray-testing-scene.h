@@ -10,7 +10,7 @@ public:
     using Scene::Scene;
 
     // Blue to white gradient based in y coordinate (up to down), values copied from guide
-    Pixel get_pixel_color_from_ray(Ray& ray) override {
+    Pixel get_pixel_color_from_ray(Ray& ray, int depth) override {
         double t = 0.5 * (ray.direction.y + 1.0);
         return (1.0 - t) * Pixel(1.0, 1.0, 1.0) + t * Pixel(0.5, 0.7, 1.0);
     }

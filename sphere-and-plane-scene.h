@@ -17,7 +17,7 @@ public:
     }
 
     // Simple test with one red sphere and green plane in spanning across Z and X axis
-    Pixel get_pixel_color_from_ray(Ray& ray) override {
+    Pixel get_pixel_color_from_ray(Ray& ray, int depth) override {
         if (hit_sphere(Point(0,0,-1), 0.25, ray)) {
             return {1, 0, 0};
         }
