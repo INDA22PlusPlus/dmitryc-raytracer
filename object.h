@@ -5,13 +5,7 @@
 #include "vec.h"
 #include "ray.h"
 
-
-class HitData;
-
-class Material {
-public:
-    virtual bool scatter(const Ray& r_in, const HitData& rec, Color& attenuation, Ray& scattered) const = 0;
-};
+class Material;
 
 class HitData {
 public:
@@ -68,7 +62,7 @@ public:
     double radius;
     shared_ptr<Material> material;
 
-    Sphere(Point center, double radius, shared_ptr<Material> material, double t_min, double t_max) : Object(t_min, t_max) {
+    Sphere(Point center, double radius, double t_min, double t_max, shared_ptr<Material> material) : Object(t_min, t_max) {
         this->center = center;
         this->radius = radius;
         this->material = material;
@@ -102,6 +96,38 @@ public:
 
         hit_data.update_data(root, ray, center, radius);
 
+        return true;
+    }
+};
+
+// Todo: mve outside, separate, causes too many errors for now
+class Material {
+public:
+    virtual bool scatter(Ray& ray_in, HitData& hit_data, Color& color_reduction, Ray& scattered) const {
+//        return false;
+    };
+};
+
+// Lambertian lighting based materials
+class Lambertian : public Material {
+public:
+    // <=> Albedo
+    Color proportion_reflected;
+
+    Lambertian(const Color& albedo) {
+        this->proportion_reflected = albedo;
+    }
+
+    virtual bool scatter(Ray& ray_in, HitData& hit_data, Color& color_reduction, Ray& scattered) const override {
+        // Scatter slightly randomly
+        Vec scatter_direction = hit_data.normal + Vec::random_unit_sphere();
+
+        // Catch degenerate scatter direction
+        if (scatter_direction.near_zero())
+            scatter_direction = hit_data.normal;
+
+        scattered = Ray(hit_data.point, scatter_direction);
+        color_reduction = proportion_reflected;
         return true;
     }
 };

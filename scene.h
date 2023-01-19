@@ -95,7 +95,7 @@ public:
 
         if (objects.hit(ray, hit_data)) {
             // Recursive calling of get_pixel to bounce multiple times
-            Point target = hit_data.point + hit_data.normal + Vec::random_unit_sphere();
+            Point target = hit_data.point + hit_data.normal + Vec::random_in_hemisphere(hit_data.normal);
             Ray temp_ray(hit_data.point, target - hit_data.point);
             return 0.5 * get_pixel_color_from_ray(temp_ray, depth - 1);
         }

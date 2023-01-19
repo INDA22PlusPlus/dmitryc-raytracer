@@ -19,6 +19,9 @@ public:
     // Variables
     double x, y, z;
 
+
+    constexpr static const double near_zero_constant = 1e-8;
+
     // Todo: Doesn't work
 //    double& r = x;
 //    double& g = y;
@@ -174,12 +177,19 @@ public:
         return random_in_unit_sphere().get_normalized();
     }
 
-    Vec random_in_hemisphere(const Vec& normal) {
+    static Vec random_in_hemisphere(const Vec& normal) {
         Vec in_unit_sphere = random_in_unit_sphere();
         if (dot(in_unit_sphere, normal) > 0.0) // In the same hemisphere as the normal
             return in_unit_sphere;
         else
             return -in_unit_sphere;
+    }
+
+    // Return true if the vector is close to zero in all dimensions.
+    bool near_zero() const {
+        return (fabs(x) < near_zero_constant) &&
+               (fabs(y) < near_zero_constant) &&
+               (fabs(z) < near_zero_constant);
     }
 };
 
