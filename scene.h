@@ -113,7 +113,7 @@ public:
 
         // Divide the color by the number of samples.
         // TODO: change manual constant
-        auto scale = 0.003;
+        double scale = 1.0 / samples_per_pixel;
         r = sqrt(scale * r);
         g = sqrt(scale * g);
         b = sqrt(scale * b);
@@ -155,7 +155,7 @@ public:
             }
             for (int x = 0; x < window_width; x++) {
                 Pixel pixel_color(0, 0, 0);
-                for (int i = 0; i < max_color_depth; i++) {
+                for (int i = 0; i < samples_per_pixel; i++) {
                     // UV interpretation of X (in our case corresponding to U) and Y (corresponding to V) axis
                     // coordinates of a plane (using relative coordinates)
                     double u = static_cast<double>(x + random_double()) / (window_width - 1);
