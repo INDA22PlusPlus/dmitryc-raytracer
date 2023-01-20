@@ -18,7 +18,7 @@ public:
     int max_depth = 10;
     int samples_per_pixel = 100;
 
-    string default_img_path = "img2.ppm";
+    string default_img_path = "img.ppm";
     bool show_progress = false;
 
     ObjectList objects;
