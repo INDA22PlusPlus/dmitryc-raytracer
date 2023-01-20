@@ -18,7 +18,7 @@ public:
     int max_depth = 10;
     int samples_per_pixel = 100;
 
-    string default_img_path = "/Users/dima/CLionProjects/dmitryc-raytracer/img.ppm";
+    string default_img_path = "img2.ppm";
     bool show_progress = false;
 
     ObjectList objects;
@@ -86,7 +86,7 @@ public:
         // Darker color
         return (1.0 - t) * Color(0.5, 0.5, 0.5) + t * Color(0.1, 0.3, 0.6);
 //        return {0.5, 0.5, 0.5};
-        return {0.1, 0.1, 0.1};
+//        return {0.1, 0.1, 0.1};
 //        return {0.01, 0.01, 0.01};
 //        return {0, 0, 0};
     }

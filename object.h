@@ -196,15 +196,17 @@ public:
 class Metal : public Material {
 public:
     Color proportion_reflected;
+    double  fuzziness;
 
-    explicit Metal(const Color& proportion_reflected) {
+    explicit Metal(const Color& proportion_reflected, double fuzziness) {
         this->proportion_reflected = proportion_reflected;
+        this->fuzziness = fuzziness;
     }
 
     bool scatter(const Ray& ray_in, const HitData& hit_data, Color& color_reduction, Ray& scattered_ray) const override {
         // Reflects about normal
         Vec reflected_direction = Vec::reflect(ray_in.direction.get_normalized(), hit_data.normal);
-        scattered_ray = Ray(hit_data.point, reflected_direction);
+        scattered_ray = Ray(hit_data.point, reflected_direction + fuzziness * Vec::random_in_unit_sphere());
         color_reduction = proportion_reflected;
         // Check for right direction
         return (dot(scattered_ray.direction, hit_data.normal) > 0);
