@@ -26,11 +26,18 @@ public:
         this->front_face = front_face;
     }
 
-    void update_data(double new_t, Ray ray, Point center, double radius, shared_ptr<Material> material_ptr) {
+    void update_data_sphere(double new_t, Ray ray, Point center, double radius, shared_ptr<Material> material_ptr) {
         t = new_t;
         point = ray.end_at_mult_const(t);
         Vec out_normal = (point - center) / radius;
         set_face_and_normal(ray, out_normal);
+        this->material_ptr = std::move(material_ptr);
+    }
+
+    void update_data_plane(double new_t, Ray ray, Vec new_normal, double distance_to_plane, shared_ptr<Material> material_ptr) {
+        t = new_t;
+        point = ray.end_at_mult_const(t);
+        set_face_and_normal(ray, new_normal);
         this->material_ptr = std::move(material_ptr);
     }
 
@@ -97,11 +104,38 @@ public:
             }
         }
 
-        hit_data.update_data(root, ray, center, radius, material_ptr);
+        hit_data.update_data_sphere(root, ray, center, radius, material_ptr);
 
         return true;
     }
 };
+
+class Plane: public Object {
+public:
+    Vec normal;
+    double distance_to_plane;
+    shared_ptr<Material> material_ptr;
+
+    Plane(Vec normal, double distance_to_plane, double t_min, double t_max, shared_ptr<Material> material_ptr) : Object(t_min, t_max) {
+        this->normal = normal;
+        this->distance_to_plane = distance_to_plane;
+        this->material_ptr = std::move(material_ptr);
+    }
+
+    bool hit(Ray& ray, HitData& hit_data) override {
+        double denominator = dot(ray.direction, normal);
+        double numerator = distance_to_plane - dot(ray.origin, normal);
+        double t = numerator / denominator;
+        if (t < 0) {
+            return false;
+        }
+
+        hit_data.update_data_plane(t - 0.1, ray, normal.get_normalized(), distance_to_plane, material_ptr);
+
+        return true;
+    }
+};
+
 
 // Todo: mve outside, separate, causes too many errors for now
 class Material {

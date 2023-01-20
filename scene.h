@@ -16,9 +16,9 @@ public:
     int max_color_depth;
 
     int max_depth = 10;
-    int samples_per_pixel = 10000;
+    int samples_per_pixel = 100;
 
-    string default_img_path = "img.ppm";
+    string default_img_path = "/Users/dima/CLionProjects/dmitryc-raytracer/img.ppm";
     bool show_progress = false;
 
     ObjectList objects;
@@ -81,13 +81,14 @@ public:
 
     // Light blue to white background
     static Color get_background_color(Ray ray) {
-//        double t = 0.5 * (ray.direction.y + 1.0);
-////        return (1.0 - t) * Color(1.0, 1.0, 1.0) + t * Color(0.5, 0.7, 1.0);
-//        // Darker color
-//        return (1.0 - t) * Color(0.5, 0.5, 0.5) + t * Color(0.1, 0.3, 0.6);
-//        return {0.1, 0.1, 0.1};
+        double t = 0.5 * (ray.direction.y + 1.0);
+//        return (1.0 - t) * Color(1.0, 1.0, 1.0) + t * Color(0.5, 0.7, 1.0);
+        // Darker color
+        return (1.0 - t) * Color(0.5, 0.5, 0.5) + t * Color(0.1, 0.3, 0.6);
+//        return {0.5, 0.5, 0.5};
+        return {0.1, 0.1, 0.1};
 //        return {0.01, 0.01, 0.01};
-        return {0, 0, 0};
+//        return {0, 0, 0};
     }
 
     // Casts rays, gets the color at which the ray ends after all manipulations. Default implementation if no ray
