@@ -57,7 +57,7 @@ public:
         scene.render_to_ppm_img();
     }
 
-    void append_to_file(string &path, string &msg, vector<long> &data) {
+    void append_to_file(string &path, string &msg, vector<long> &data, bool add_data=true) {
         ofstream file;
         // Use append instead of override
         file.open(path, std::ios_base::app);
@@ -70,7 +70,11 @@ public:
         }
         data_string += "]";
 
-        file << msg << " : " << avg << " ; " << data_string << endl;
+        file << msg << " : " << avg;
+        if (add_data) {
+            file << " ; " << data_string;
+        }
+        file << endl;
     }
 
     // Reduce based average of a vector, inspired by other solutions
@@ -93,14 +97,11 @@ public:
         render_scene();
         auto stop = high_resolution_clock::now();
         auto total = duration_cast<microseconds>(stop - start);
-//        cout << endl << total.count() << endl << endl;
 
-        // Append to scene.txt
-//        append_to_file(scene_benchmark_path, "render width=400 before optimizations : ", total.count());
         return total.count();
     }
 
-    void benchmark_scene_multiple_times(int amount_of_repeats=10, string msg="render : ", bool print_progress=false) {
+    void benchmark_scene_multiple_times(int amount_of_repeats=10, string msg="render", bool print_progress=false) {
         vector<long> data;
         for (int i = 0; i < amount_of_repeats; i++) {
             data.push_back(benchmark_scene());
@@ -109,6 +110,29 @@ public:
             }
         }
         append_to_file(scene_benchmark_path,msg, data);
+    }
+
+    long benchmark_vec_add() {
+        Vec v(1, 2, 3), u(4, 5, 6);
+
+        auto start = high_resolution_clock::now();
+        Vec w = u + v;
+        auto stop = high_resolution_clock::now();
+        auto total = duration_cast<nanoseconds>(stop - start);
+
+        return total.count();
+    }
+
+
+    void benchmark_vec_multiple_times(int amount_of_repeats=1000, string msg="vec", bool print_progress=false) {
+        vector<long> data;
+        for (int i = 0; i < amount_of_repeats; i++) {
+            data.push_back(benchmark_vec_add());
+            if (print_progress) {
+                cout << static_cast<int>((static_cast<float>(i + 1) / static_cast<float>(amount_of_repeats)) * 100) << "%" << endl;
+            }
+        }
+        append_to_file(vec_benchmark_path, msg, data, false);
     }
 };
 
