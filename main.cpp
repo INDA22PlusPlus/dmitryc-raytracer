@@ -20,7 +20,7 @@ using namespace std;
 int main(int argc,char **argv) {
 
     PerformanceTesting pf;
-    pf.benchmark_scene_multiple_times(10, "render width=200 before improvements", true);
+    pf.benchmark_scene_multiple_times(10, "render width=200 convert doubles to floats", true);
 
     return 0;
 }

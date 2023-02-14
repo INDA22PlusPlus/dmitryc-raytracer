@@ -12,20 +12,20 @@ class HitData {
 public:
     Point point;
     Vec normal;
-    double t = 0;
+    float t = 0;
     bool front_face = true;
     shared_ptr<Material> material_ptr;
 
     HitData() = default;
 
-    HitData(Point point, Vec normal, double t, bool front_face) {
+    HitData(Point point, Vec normal, float t, bool front_face) {
         this->point = point;
         this->normal = normal;
         this->t = t;
         this->front_face = front_face;
     }
 
-    void update_data_sphere(double new_t, Ray ray, Point center, double radius, shared_ptr<Material> material_ptr) {
+    void update_data_sphere(float new_t, Ray ray, Point center, float radius, shared_ptr<Material> material_ptr) {
         t = new_t;
         point = ray.end_at_mult_const(t);
         Vec out_normal = (point - center) / radius;
@@ -33,7 +33,7 @@ public:
         this->material_ptr = std::move(material_ptr);
     }
 
-    void update_data_plane(double new_t, Ray ray, Vec new_normal, double distance_to_plane, shared_ptr<Material> material_ptr) {
+    void update_data_plane(float new_t, Ray ray, Vec new_normal, float distance_to_plane, shared_ptr<Material> material_ptr) {
         t = new_t;
         point = ray.end_at_mult_const(t);
         set_face_and_normal(ray, new_normal);
@@ -50,12 +50,12 @@ public:
 
 class Object {
 public:
-    double t_min = 0;
-    double t_max = 0;
+    float t_min = 0;
+    float t_max = 0;
 
     Object() = default;
 
-    Object(double t_min, double t_max) {
+    Object(float t_min, float t_max) {
         this->t_min = t_min;
         this->t_max = t_max;
     }
@@ -68,10 +68,10 @@ public:
 class Sphere: public Object {
 public:
     Point center;
-    double radius;
+    float radius;
     shared_ptr<Material> material_ptr;
 
-    Sphere(Point center, double radius, double t_min, double t_max, shared_ptr<Material> material_ptr) : Object(t_min, t_max) {
+    Sphere(Point center, float radius, float t_min, float t_max, shared_ptr<Material> material_ptr) : Object(t_min, t_max) {
         this->center = center;
         this->radius = radius;
         this->material_ptr = material_ptr;
@@ -79,11 +79,11 @@ public:
 
     bool hit(Ray& ray, HitData& hit_data) override {
         Vec v = ray.origin - center;
-        double a = ray.direction.get_norm_squared();
+        float a = ray.direction.get_norm_squared();
         // Optimized version with b = 2h, so that the 2 can be factored out and simplified
-        double half_b = dot(v, ray.direction);
-        double c = v.get_norm_squared() - radius * radius;
-        double discriminant = half_b * half_b - a * c;
+        float half_b = dot(v, ray.direction);
+        float c = v.get_norm_squared() - radius * radius;
+        float discriminant = half_b * half_b - a * c;
 
         // Early check if the sphere was hit
         if (discriminant < 0) {
@@ -92,8 +92,8 @@ public:
 
         // Todo: rewrite cleaner
         // Checking the roots
-        double sqrt_result = sqrt(discriminant);
-        double root = (-half_b - sqrt_result) / a;
+        float sqrt_result = sqrt(discriminant);
+        float root = (-half_b - sqrt_result) / a;
         // Checking for the opposite condition to exit
         if (root < t_min or root > t_max) {
             // Reassigning the same variable with the second root, used later
@@ -112,19 +112,19 @@ public:
 class Plane: public Object {
 public:
     Vec normal;
-    double distance_to_plane;
+    float distance_to_plane;
     shared_ptr<Material> material_ptr;
 
-    Plane(Vec normal, double distance_to_plane, double t_min, double t_max, shared_ptr<Material> material_ptr) : Object(t_min, t_max) {
+    Plane(Vec normal, float distance_to_plane, float t_min, float t_max, shared_ptr<Material> material_ptr) : Object(t_min, t_max) {
         this->normal = normal;
         this->distance_to_plane = distance_to_plane;
         this->material_ptr = std::move(material_ptr);
     }
 
     bool hit(Ray& ray, HitData& hit_data) override {
-        double denominator = dot(ray.direction, normal);
-        double numerator = distance_to_plane - dot(ray.origin, normal);
-        double t = numerator / denominator;
+        float denominator = dot(ray.direction, normal);
+        float numerator = distance_to_plane - dot(ray.origin, normal);
+        float t = numerator / denominator;
         if (t < 0) {
             return false;
         }
@@ -195,9 +195,9 @@ public:
 class Metal : public Material {
 public:
     Color proportion_reflected;
-    double  fuzziness;
+    float  fuzziness;
 
-    explicit Metal(const Color& proportion_reflected, double fuzziness) {
+    explicit Metal(const Color& proportion_reflected, float fuzziness) {
         this->proportion_reflected = proportion_reflected;
         this->fuzziness = fuzziness;
     }

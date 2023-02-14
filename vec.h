@@ -10,39 +10,39 @@
 
 using namespace std;
 
-constexpr static const double near_zero_constant = 1e-9;
+constexpr static const float near_zero_constant = 1e-9;
 
 
 // Todo: wtf? just find a better fix
 class Vec;
-inline double dot(const Vec &u, const Vec &v);
+inline float dot(const Vec &u, const Vec &v);
 inline std::ostream& operator<<(std::ostream &out, const Vec &v);
 inline Vec operator+(const Vec &u, const Vec &v);
 inline Vec operator-(const Vec &u, const Vec &v);
 inline Vec operator*(const Vec &u, const Vec &v);
-inline Vec operator*(double t, const Vec &v);
-inline Vec operator*(const Vec &v, double t);
-inline Vec operator/(Vec v, double t);
-inline double dot(const Vec &u, const Vec &v);
+inline Vec operator*(float t, const Vec &v);
+inline Vec operator*(const Vec &v, float t);
+inline Vec operator/(Vec v, float t);
+inline float dot(const Vec &u, const Vec &v);
 inline Vec cross(const Vec &u, const Vec &v);
 
 
 class Vec {
 public:
     // Variables
-    double x, y, z;
+    float x, y, z;
 
     // Todo: Doesn't work
-//    double& r = x;
-//    double& g = y;
-//    double& b = z;
+//    float& r = x;
+//    float& g = y;
+//    float& b = z;
 
     // Constructors
     Vec() {
         x = y = z = 0;
     }
 
-    Vec(double x, double y, double z) {
+    Vec(float x, float y, float z) {
         this->x = x;
         this->y = y;
         this->z = z;
@@ -55,7 +55,7 @@ public:
 //        this->z = z;
 //    }
 
-    explicit Vec(const double arr[3]) {
+    explicit Vec(const float arr[3]) {
         x = arr[0];
         y = arr[1];
         z = arr[2];
@@ -66,7 +66,7 @@ public:
 
     // Array like accessing of x, y and z
     // Todo: Better? (most likely fixed by referencing the array the right way)
-    double operator[](int i) const {
+    float operator[](int i) const {
         switch (i) {
             case 0:
                 return x;
@@ -80,7 +80,7 @@ public:
     }
 
     // Todo: Find a way to use the other function instead of repeating code?
-    double& operator[](int i) {
+    float& operator[](int i) {
 //        return operator[](i);
         switch (i) {
             case 0:
@@ -125,20 +125,20 @@ public:
         return *this;
     }
 
-    Vec& operator*=(const double t) {
+    Vec& operator*=(const float t) {
         x *= t;
         y *= t;
         z *= t;
         return *this;
     }
 
-    Vec& operator/=(const double t) {
+    Vec& operator/=(const float t) {
         return *this *= 1/t;
     }
 
     // Todo:  References do not work at the moment, prob fix later
-//    double * get_arr() {
-//        static double arr[] = {x, y, z};
+//    float * get_arr() {
+//        static float arr[] = {x, y, z};
 //        return arr;
 //    }
 
@@ -146,11 +146,11 @@ public:
         *this /= get_norm();
     }
 
-    inline double get_norm() const {
+    inline float get_norm() const {
         return sqrt(get_norm_squared());
     }
 
-    inline double get_norm_squared() const {
+    inline float get_norm_squared() const {
         return x * x + y * y + z * z;
     }
 
@@ -167,11 +167,11 @@ public:
 
     // Random functions taken from the guide
     inline static Vec random() {
-        return Vec(random_double(), random_double(), random_double());
+        return Vec(random_float(), random_float(), random_float());
     }
 
-    inline static Vec random(double min, double max) {
-        return Vec(random_double(min,max), random_double(min,max), random_double(min,max));
+    inline static Vec random(float min, float max) {
+        return Vec(random_float(min,max), random_float(min,max), random_float(min,max));
     }
 
     // Todo: Better implementation please
@@ -235,19 +235,19 @@ inline Vec operator*(const Vec &u, const Vec &v) {
 }
 
 // Todo: Bracket assignment right?
-inline Vec operator*(double t, const Vec &v) {
+inline Vec operator*(float t, const Vec &v) {
     return {t * v.x, t * v.y, t * v.z};
 }
 
-inline Vec operator*(const Vec &v, double t) {
+inline Vec operator*(const Vec &v, float t) {
     return t * v;
 }
 
-inline Vec operator/(Vec v, double t) {
+inline Vec operator/(Vec v, float t) {
     return (1 / t) * v;
 }
 
-inline double dot(const Vec &u, const Vec &v) {
+inline float dot(const Vec &u, const Vec &v) {
     return u.x * v.x + u.y * v.y + u.z * v.z;
 }
 
@@ -259,9 +259,9 @@ inline Vec cross(const Vec &u, const Vec &v) {
 
 // Todo: Fix
 //class VecColor: public Vec {
-//    double &r = x;
-//    double &g = y;
-//    double &b = z;
+//    float &r = x;
+//    float &g = y;
+//    float &b = z;
 //};
 
 #endif //DMITRYC_RAYTRACER_VEC_H

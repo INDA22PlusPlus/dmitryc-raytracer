@@ -10,7 +10,7 @@ class Scene {
 public:
     Camera camera;
 
-    double aspect_ratio;
+    float aspect_ratio;
     int window_width;
     int window_height;
     int max_color_depth;
@@ -40,7 +40,7 @@ public:
     // Todo: add default_img_path as a parameter to constructors
 
     // Manual height
-    Scene(double aspect_ratio, int window_width, int window_height, int max_color_depth) {
+    Scene(float aspect_ratio, int window_width, int window_height, int max_color_depth) {
         this->aspect_ratio = aspect_ratio;
         this->window_height = window_height;
         this->window_width = window_width;
@@ -50,7 +50,7 @@ public:
     }
 
     // Manual height, with camera
-    Scene(double aspect_ratio, int window_width, int window_height, int max_color_depth, Camera camera) {
+    Scene(float aspect_ratio, int window_width, int window_height, int max_color_depth, Camera camera) {
         this->aspect_ratio = aspect_ratio;
         this->window_height = window_height;
         this->window_width = window_width;
@@ -61,7 +61,7 @@ public:
     }
 
     // Automatically adjusted height
-    Scene(double aspect_ratio, int window_width, int max_color_depth) {
+    Scene(float aspect_ratio, int window_width, int max_color_depth) {
         this->aspect_ratio = aspect_ratio;
         this->window_height = static_cast<int>(window_width / aspect_ratio);
         this->window_width = window_width;
@@ -71,7 +71,7 @@ public:
     }
 
     // Automatically adjusted height, with camera
-    Scene(double aspect_ratio, int window_width, int max_color_depth, Camera camera) {
+    Scene(float aspect_ratio, int window_width, int max_color_depth, Camera camera) {
         this->aspect_ratio = aspect_ratio;
         this->window_height = static_cast<int>(window_width / aspect_ratio);
         this->window_width = window_width;
@@ -83,7 +83,7 @@ public:
 
     // Light blue to white background
     static Color get_background_color(Ray ray) {
-        double t = 0.5 * (ray.direction.y + 1.0);
+        float t = 0.5 * (ray.direction.y + 1.0);
 //        return (1.0 - t) * Color(1.0, 1.0, 1.0) + t * Color(0.5, 0.7, 1.0);
         // Darker color
         return (1.0 - t) * Color(0.5, 0.5, 0.5) + t * Color(0.1, 0.3, 0.6);
@@ -132,7 +132,7 @@ public:
 
         // Divide the color by the number of samples.
         // TODO: change manual constant
-        double scale = 1.0 / samples_per_pixel;
+        float scale = 1.0 / samples_per_pixel;
         r = sqrt(scale * r);
         g = sqrt(scale * g);
         b = sqrt(scale * b);
@@ -174,9 +174,9 @@ public:
                 for (int i = 0; i < samples_per_pixel; i++) {
                     // UV interpretation of X (in our case corresponding to U) and Y (corresponding to V) axis
                     // coordinates of a plane (using relative coordinates)
-                    double u = static_cast<double>(x + random_double()) / (window_width - 1);
-                    double v = static_cast<double>(window_height - y + random_double()) / (window_height - 1);
-//                double v = static_cast<double>(y) / (window_height - 1);
+                    float u = static_cast<float>(x + random_float()) / (window_width - 1);
+                    float v = static_cast<float>(window_height - y + random_float()) / (window_height - 1);
+//                float v = static_cast<float>(y) / (window_height - 1);
                     Ray ray(camera.origin,
                             camera.lower_left_corner + u * camera.horizontal + v * camera.vertical - camera.origin);
                     pixel_color += get_pixel_color_from_ray(ray, max_depth);
