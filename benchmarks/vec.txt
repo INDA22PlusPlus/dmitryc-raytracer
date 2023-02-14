@@ -1,10 +1,16 @@
-vec add before improvement double : 30
-vec add before improvement double : 26
-vec add before improvement double : 26
-vec add before improvement double : 26
-vec add before improvement double : 26
-vec add before improvement float : 32
-vec add before improvement float : 26
-vec add before improvement float : 26
-vec add before improvement float : 26
-vec add before improvement float : 26
+vec add expression before improvement double : 30
+vec add expression before improvement double : 26
+vec add expression before improvement double : 26
+vec add expression before improvement double : 26
+vec add expression before improvement double : 26
+vec add expression before improvement float : 32
+vec add expression before improvement float : 26
+vec add expression before improvement float : 26
+vec add expression before improvement float : 26
+vec add expression before improvement float : 26
+
+vec add expression before improvement float : 31
+vec add expression before improvement float : 26
+vec add expression before improvement float : 26
+vec add expression before improvement float : 34
+vec add expression before improvement float : 54

@@ -2,6 +2,7 @@
 #define DMITRYC_RAYTRACER_PERFORMANCE_TESTING_H
 
 #include "vec.h"
+#include "vec-optimized.h"
 #include "scene.h"
 #include <string>
 #include <iostream>
@@ -113,10 +114,11 @@ public:
     }
 
     long benchmark_vec_add() {
-        Vec v(1, 2, 3), u(4, 5, 6);
+        Vec v(1, 2, 3), u(4, 5, 6), w;
+//        VecOptimized v(1, 2, 3), u(4, 5, 6), w;
 
         auto start = high_resolution_clock::now();
-        Vec w = u + v;
+        w = u + v;
         auto stop = high_resolution_clock::now();
         auto total = duration_cast<nanoseconds>(stop - start);
 
