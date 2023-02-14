@@ -236,7 +236,7 @@ inline Vec operator*(const Vec &u, const Vec &v) {
 
 // Todo: Bracket assignment right?
 inline Vec operator*(double t, const Vec &v) {
-    return {t*v.x, t*v.y, t*v.z};
+    return {t * v.x, t * v.y, t * v.z};
 }
 
 inline Vec operator*(const Vec &v, double t) {
@@ -244,7 +244,7 @@ inline Vec operator*(const Vec &v, double t) {
 }
 
 inline Vec operator/(Vec v, double t) {
-    return (1/t) * v;
+    return (1 / t) * v;
 }
 
 inline double dot(const Vec &u, const Vec &v) {

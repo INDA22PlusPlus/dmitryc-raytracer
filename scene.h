@@ -15,13 +15,15 @@ public:
     int window_height;
     int max_color_depth;
 
-    int max_depth = 10;
+    int max_depth = 5;
     int samples_per_pixel = 100;
 
-    string default_img_path = "img.ppm";
+    string default_img_path = "/Users/dima/CLionProjects/dmitryc-raytracer/img.ppm";
     bool show_progress = false;
 
     ObjectList objects;
+
+    bool use_simd = false;
 
 //    Pixel *frame_buf;
 
@@ -167,9 +169,6 @@ public:
     void draw_ppm(ofstream& img) {
         int hundredth_part = window_height / 100;
         for (int y = 0; y < window_height; y++) {
-            if (y % hundredth_part == 0 and show_progress) {
-                cout << y / hundredth_part << "%" << endl;
-            }
             for (int x = 0; x < window_width; x++) {
                 Pixel pixel_color(0, 0, 0);
                 for (int i = 0; i < samples_per_pixel; i++) {
@@ -183,6 +182,9 @@ public:
                     pixel_color += get_pixel_color_from_ray(ray, max_depth);
                 }
                 img << get_converted_color(pixel_color);
+            }
+            if (y % hundredth_part == 0 and show_progress) {
+                cout << static_cast<int>((static_cast<float>(y + hundredth_part) / static_cast<float>(window_height)) * 100)  << "%" << endl;
             }
         }
     }
